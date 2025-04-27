@@ -5,7 +5,7 @@ contract StudentProfile {
     address public student;
     address public createdBy;
 
-    string public fullName;
+    string public studentFullName;
     string public group;
     string public studentId;
 
@@ -30,15 +30,14 @@ contract StudentProfile {
         _;
     }
 
-    constructor(address _student, string memory _fullName, string memory _group, string memory _studentId) {
+    constructor(address _student, string memory _studentFullName, string memory _group, string memory _studentId) {
         student = _student;
-        fullName = _fullName;
+        studentFullName = _studentFullName;
         group = _group;
         studentId = _studentId;
         createdBy = msg.sender;
     }
 
-    // Студент отправляет запись на проверку конкретному преподавателю
     function submitRecord(
         string memory title,
         string memory description,
@@ -59,7 +58,6 @@ contract StudentProfile {
         }));
     }
 
-    // Только назначенный reviewer может подтвердить
     function approveRecord(uint index, string memory comment) public {
         require(index < records.length, "Invalid index");
         Record storage rec = records[index];
@@ -71,7 +69,6 @@ contract StudentProfile {
         rec.confirmer = msg.sender;
     }
 
-    // Только назначенный reviewer может отклонить
     function rejectRecord(uint index, string memory comment) public {
         require(index < records.length, "Invalid index");
         Record storage rec = records[index];
@@ -83,7 +80,6 @@ contract StudentProfile {
         rec.confirmer = msg.sender;
     }
 
-    // Возвращает все подтверждённые записи
     function getApprovedRecords() public view returns (Record[] memory) {
         uint count = 0;
         for (uint i = 0; i < records.length; i++) {
@@ -103,7 +99,6 @@ contract StudentProfile {
         return approved;
     }
 
-    // Возвращает записи, которые назначены текущему преподавателю и ожидают проверки
     function getMyPendingRecords() public view returns (Record[] memory) {
         uint count = 0;
         for (uint i = 0; i < records.length; i++) {
@@ -128,6 +123,6 @@ contract StudentProfile {
     }
 
     function getStudentInfo() public view returns (string memory, string memory, string memory) {
-        return (fullName, group, studentId);
+        return (studentFullName, group, studentId);
     }
 }

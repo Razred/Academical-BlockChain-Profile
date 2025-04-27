@@ -3,19 +3,15 @@ import { ethers } from 'ethers';
 import factoryAbi from '../abi/StudentFactory.json';
 import profileAbi from '../abi/StudentProfile.json';
 
-const factoryAddress = '...';
+const factoryAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'; // замени на свой реальный адрес
 
 export default function StudentDashboard() {
   const [account, setAccount] = useState(null);
+  const [studentId, setStudentId] = useState(null);
+  const [studentFullName, setStudentFullName] = useState(null);
   const [profileContractAddress, setProfileContractAddress] = useState(null);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const connectWallet = async () => {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const accounts = await provider.send("eth_requestAccounts", []);
-    setAccount(accounts[0]);
-  };
 
   const getFactoryContract = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum);
@@ -29,30 +25,48 @@ export default function StudentDashboard() {
     return new ethers.Contract(profileContractAddress, profileAbi, signer);
   };
 
-  const fetchProfileAddress = async () => {
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      alert("Установите MetaMask!");
+      return;
+    }
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const accounts = await provider.send("eth_requestAccounts", []);
+    setAccount(accounts[0]);
+  };
+
+  const fetchStudentInfo = async () => {
     try {
-      const factory = await getFactoryContract();
-      const addr = await factory.getProfileForStudent(account);
-      if (addr === ethers.ZeroAddress) {
-        alert("Профиль не найден. Обратитесь к администратору.");
-        return;
+      const contract = await getFactoryContract();
+      const id = await contract.getStudentByAddress(account);
+
+      if (id && id !== "") {
+        setStudentId(id);
+  
+        const studentInfo = await contract.getStudentById(id);
+        setStudentFullName(studentInfo[1]);
+        const profileAddr = studentInfo[4];
+        setProfileContractAddress(profileAddr);
+      } else {
+        alert("🚫 Ваш адрес не привязан к профилю студента. Обратитесь к администратору.");
       }
-      setProfileContractAddress(addr);
     } catch (err) {
-      console.error("Ошибка получения адреса профиля:", err);
+      console.error("Ошибка загрузки профиля студента:", err);
     }
   };
 
   const loadRecords = async () => {
     try {
+      if (!profileContractAddress) return;
       setLoading(true);
       const contract = await getProfileContract();
       const result = await contract.getAllRecords();
       setRecords(result);
     } catch (err) {
       console.error("Ошибка загрузки записей:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const addRecord = async (e) => {
@@ -85,11 +99,15 @@ export default function StudentDashboard() {
   };
 
   useEffect(() => {
-    if (account) fetchProfileAddress();
+    if (account) {
+      fetchStudentInfo();
+    }
   }, [account]);
 
   useEffect(() => {
-    if (profileContractAddress) loadRecords();
+    if (profileContractAddress) {
+      loadRecords();
+    }
   }, [profileContractAddress]);
 
   return (
@@ -100,29 +118,31 @@ export default function StudentDashboard() {
         <button onClick={connectWallet} className="bg-blue-600 text-white px-4 py-2 rounded">
           Подключить MetaMask
         </button>
-      ) : profileContractAddress ? (
+      ) : studentId && profileContractAddress ? (
         <>
           <p><strong>Вы вошли как:</strong> <span className="font-mono">{account}</span></p>
+          <p><strong>Ваше имя:</strong> <span className="font-mono">{studentFullName}</span></p>
+          <p><strong>Ваш ID студента:</strong> <span className="font-mono">{studentId}</span></p>
           <p><strong>Контракт профиля:</strong> <span className="font-mono">{profileContractAddress}</span></p>
 
           <form onSubmit={addRecord} className="space-y-2 mt-6">
             <h2 className="text-lg font-semibold">Добавить достижение</h2>
             <input name="title" placeholder="Название" className="border p-2 w-full rounded" required />
             <textarea name="description" placeholder="Описание" className="border p-2 w-full rounded" required />
-            <input name="category" placeholder="Категория (course, article, attendance...)" className="border p-2 w-full rounded" required />
+            <input name="category" placeholder="Категория" className="border p-2 w-full rounded" required />
             <input name="link" placeholder="Ссылка (если есть)" className="border p-2 w-full rounded" />
             <input name="reviewer" placeholder="Адрес преподавателя" className="border p-2 w-full rounded" required />
             <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-              Отправить на подтверждение
+              Отправить
             </button>
           </form>
 
           <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">📘 Все записи</h2>
+            <h2 className="text-lg font-semibold mb-2">📘 Все достижения</h2>
             {loading ? (
               <p>Загрузка...</p>
             ) : records.length === 0 ? (
-              <p className="text-gray-600">Пока записей нет</p>
+              <p className="text-gray-600">Пока нет записей</p>
             ) : (
               <ul className="space-y-3">
                 {records.map((r, i) => (
@@ -144,7 +164,7 @@ export default function StudentDashboard() {
           </div>
         </>
       ) : (
-        <p className="text-red-600 mt-4">Профиль не найден</p>
+        <p className="text-red-600 mt-4">Профиль не найден или ваш адрес не зарегистрирован.</p>
       )}
     </div>
   );

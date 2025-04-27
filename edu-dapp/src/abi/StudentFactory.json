@@ -1,124 +1,452 @@
 [
-    {
-      "inputs": [],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "allProfiles",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "student",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "fullName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "group",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "studentId",
-          "type": "string"
-        }
-      ],
-      "name": "createStudentProfile",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getAllProfiles",
-      "outputs": [
-        {
-          "internalType": "address[]",
-          "name": "",
-          "type": "address[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "student",
-          "type": "address"
-        }
-      ],
-      "name": "getProfileForStudent",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "studentToProfile",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ]
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "allStudents",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "group",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "profile",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "allTeachers",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "department",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "teacherId",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "studentWallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "studentFullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "group",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "createStudentProfile",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "teacherWallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "department",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "teacherId",
+        "type": "string"
+      }
+    ],
+    "name": "createTeacher",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllStudents",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "fullName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "group",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "studentId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "profile",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct StudentFactory.Student[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllTeachers",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "fullName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "department",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "teacherId",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct StudentFactory.Teacher[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "studentWallet",
+        "type": "address"
+      }
+    ],
+    "name": "getStudentByAddress",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "getStudentById",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "group",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "profile",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "teacherId",
+        "type": "string"
+      }
+    ],
+    "name": "getTeacherById",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "department",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "id",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "isStudentWallet",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "isTeacherWallet",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "students",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "group",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "profile",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "studentsAddressToId",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "teachers",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "wallet",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fullName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "department",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "teacherId",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
